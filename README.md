@@ -23,6 +23,7 @@ If you're looking towards using these dotfiles, make sure to change these things
 - Rofi ([lbonn's fork with wayland support](https://github.com/lbonn/rofi))
 - [Rofi-mixer](https://github.com/joshpetit/rofi-mixer)
 - [Rofi power menu](https://github.com/jluttine/rofi-power-menu)
+- [The catppuccin macchiato GTK theme](https://github.com/catppuccin/gtk) ([AUR link](https://aur.archlinux.org/packages/catppuccin-gtk-theme-macchiato))
 
 ## Default keybinds
 
