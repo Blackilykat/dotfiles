@@ -1,0 +1,92 @@
+// -*- mode: jsonc -*-
+{
+    "output": [ "DP-1" ],
+    "position": "top",
+    "height": 40,
+    "width": 2000,
+    "margin": 10,
+    "spacing": 4,
+    "modules-left": [
+        "custom/spacing",
+        "hyprland/workspaces",
+	"custom/separator",
+        "pulseaudio",
+	"custom/mullvad",
+	"custom/separator",
+        "tray"
+    ],
+    "modules-center": [
+	"custom/playerctl"
+    ],
+    "modules-right": [
+        "network",
+	"disk",
+        "memory",
+	"custom/gpu",
+        "cpu",
+        "clock",
+	"custom/separator",
+        "custom/power",
+        "custom/spacing"
+    ],
+    "hyprland/workspaces": {
+	    "all-outputs": true
+    },
+
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "clock": {
+        // "timezone": "America/New_York",
+	"format": "{:%H:%M}  <span color=\"#a6da95\"></span>",
+	"format-alt": "{:%H:%M:%S}  <span color=\"#a6da95\"></span>",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+    "cpu": {
+        "format": "<span color=\"#a6da95\">󰓅</span> {usage}%",
+        "tooltip": false
+    },
+    "memory": {
+        "format": "<span color=\"#a6da95\">󰍛</span> {used} GiB"
+    },
+    "network": {
+	"format": "<span color=\"#a6da95\"></span> {bandwidthUpBits} <span color=\"#a6da95\"></span> {bandwidthDownBits}",
+        "interface": "wlan0"
+    },
+    "pulseaudio": {
+        "format": "{volume}% <span color=\"#a6da95\">󰕾</span>",
+	// I used to have this be positioned under the button, but I do not remember how I did that and accidentally deleted my dotfiles (including the script) so it's gonna stay like this for now. Same thing with the power button. Help appreciated!
+	"on-click": "rofi-mixer"
+    },
+    "custom/power": {
+        "format" : "<span color=\"#a6da95\">⏻</span>",
+	"tooltip": false,
+	"on-click": "rofi -show p -modi p:'rofi-power-menu' -theme-str 'window {width: 12em;} listview {lines: 6;}'"
+    },
+    "disk": {
+        "format": "<span color=\"#a6da95\"></span> {percentage_used}%"
+    },
+    "custom/gpu": {
+        "format": "<span color=\"#a6da95\">󰢮</span> {}%",
+	"exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits",
+	"interval": 2
+    },
+    "custom/spacing": {
+        "format": " "
+    },
+    "custom/separator": {
+        "format": " | "
+    },
+    "custom/mullvad": {
+        "exec": "mullvad status listen | ~/.config/waybar/scripts/mullvad.sh",
+	"on-click": "mullvad-vpn"
+    },
+    "custom/playerctl": {
+        "exec": "~/.config/waybar/scripts/playerctl.sh",
+	"return-type": "json",
+	"on-scroll-up": "playerctl next",
+	"on-scroll-down": "playerctl previous",
+	"on-click": "playerctl play-pause"
+    }
+}

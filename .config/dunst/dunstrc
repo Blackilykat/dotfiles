@@ -1,0 +1,19 @@
+[global]
+corner_radius = 15
+font = "Ubuntu Nerd Font Medium 14"
+frame_color = "#A6DA95"
+separator_color= frame
+dmenu = "/usr/bin/rofi -dmenu"
+
+[urgency_low]
+background = "#24273A"
+foreground = "#CAD3F5"
+
+[urgency_normal]
+background = "#24273A"
+foreground = "#CAD3F5"
+
+[urgency_critical]
+background = "#24273A"
+foreground = "#CAD3F5"
+frame_color = "#F5A97F"
