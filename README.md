@@ -1,6 +1,6 @@
 # My dotfiles
 
-My personal dotfiles.
+My personal dotfiles. *I have not tested these on other machines, they may need tinkering to work.*
 
 ## You'll want to change some stuff
 
