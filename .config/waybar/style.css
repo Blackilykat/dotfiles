@@ -27,6 +27,8 @@
 @define-color crust #181926;
 /* end borrowed */
 
+@import "./progress_style.css";
+
 window#waybar {
 	border-radius: 15px;
 	background: @base;

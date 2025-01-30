@@ -56,7 +56,7 @@ for i in np.arange(0, 100 + interval, interval):
     class_ = "perc" + format_class(i).replace(".", "-")
     i2 = i + (interval / 10)
     outfh.write(
-        f"""#custom-mediaplayer.{class_} {{
+        f"""#custom-playerctl.{class_} {{
     background-image: linear-gradient(
     to right,
     {overlay_color} {format_pc(i)}%,
