@@ -31,7 +31,7 @@ refresh_metadata() {
     length="$(echo "$(playerctl metadata mpris:length 2> /dev/null) / 1000000" | bc -l)"
 }
 
-REFRESH_RATE=10
+REFRESH_RATE=20
 sleep_time=$(echo "1 / $REFRESH_RATE" | bc -l)
 
 refresh_status
