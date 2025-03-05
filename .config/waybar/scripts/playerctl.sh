@@ -31,47 +31,41 @@ refresh_metadata() {
     length="$(echo "$(playerctl metadata mpris:length 2> /dev/null) / 1000000" | bc -l)"
 }
 
-REFRESH_RATE=20
-sleep_time=$(echo "1 / $REFRESH_RATE" | bc -l)
-
 refresh_status
 refresh_metadata
 
 while true
 do
-    if ! read -t 0.001
+    read
+
+    refresh_status
+    refresh_metadata
+
+    # If you suddently close the player it will not send the update to metadata -f
+    if ! position=$(playerctl position 2> /dev/null)
     then
-        # If you suddently close the player it will not send the update to metadata -f
-        if ! position=$(playerctl position 2> /dev/null)
-        then
-            refresh_status
-            continue
-        fi
-        if [[ "$length" = 0 ]]
-        then
-            percentage=0
-        else
-	    amount=$(echo "$position / $length * 100" | bc -l)
-            percentage=$(printf %.0f "$amount")
-        fi
-
-        printf '{"text": "'
-        if [ "$playing" -eq 0 ]
-        then
-            printf '<span color=\\"%s\\">󰓛</span>' "$PRIMARY_COLOR"
-        elif [ "$playing" -eq 1 ]
-        then
-            printf '<span color=\\"%s\\">󰐊</span> %s - %s' "$PRIMARY_COLOR" "${title}" "${artist}"
-        elif [ "$playing" -eq 2 ]
-        then
-            printf '<span color=\\"%s\\">󰏤</span> %s - %s' "$PRIMARY_COLOR" "${title}" "${artist}"
-        fi
-        printf '", "class": "perc%s-0"}\n' "$percentage"
-
-        sleep "$sleep_time"
-    else
         refresh_status
-        refresh_metadata
+        continue
     fi
-    #playerctl does not get updates on song change, and metadata title does not get updates on status changes (pause...)
-done < <(playerctl metadata -Ff '{{ status }}{{ title }}')
+    if [[ "$length" = 0 ]]
+    then
+        percentage=0
+    else
+        amount=$(echo "$position / $length * 100" | bc -l)
+        percentage=$(printf %.0f "$amount")
+    fi
+
+    printf '{"text": "'
+    if [ "$playing" -eq 0 ]
+    then
+        printf '<span color=\\"%s\\">󰓛</span>' "$PRIMARY_COLOR"
+    elif [ "$playing" -eq 1 ]
+    then
+        printf '<span color=\\"%s\\">󰐊</span> %s - %s' "$PRIMARY_COLOR" "${title}" "${artist}"
+    elif [ "$playing" -eq 2 ]
+    then
+        printf '<span color=\\"%s\\">󰏤</span> %s - %s' "$PRIMARY_COLOR" "${title}" "${artist}"
+    fi
+    printf '", "class": "perc%s-0"}\n' "$percentage"
+
+done < <(playerctl metadata -Ff '{{ status }}{{ title }}{{ position }}')
