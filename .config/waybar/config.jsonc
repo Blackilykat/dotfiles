@@ -68,9 +68,7 @@
         "format": "<span color=\"#a6da95\"></span> {percentage_used}%"
     },
     "custom/gpu": {
-        "format": "<span color=\"#a6da95\">󰢮</span> {}%",
-	"exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits",
-	"interval": 2
+	"exec": "~/.config/waybar/scripts/radeon.sh",
     },
     "custom/spacing": {
         "format": " "
