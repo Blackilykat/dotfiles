@@ -1,9 +1,9 @@
 // -*- mode: jsonc -*-
 {
-    "output": [ "DP-1" ],
+    "output": [ "eDP-1" ],
     "position": "top",
     "height": 40,
-    "width": 2000,
+    "width": 1700,
     "margin": 10,
     "spacing": 4,
     "modules-left": [
