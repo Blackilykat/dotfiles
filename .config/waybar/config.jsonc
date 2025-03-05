@@ -10,6 +10,7 @@
         "custom/spacing",
         "hyprland/workspaces",
 	"custom/separator",
+	"disk",
         "pulseaudio",
 	"custom/mullvad",
 	"custom/separator",
@@ -20,10 +21,10 @@
     ],
     "modules-right": [
         "network",
-	"disk",
         "memory",
 	"custom/gpu",
         "cpu",
+        "upower",
         "clock",
 	"custom/separator",
         "custom/power",
@@ -86,5 +87,11 @@
 	"on-scroll-up": "playerctl next",
 	"on-scroll-down": "playerctl previous",
 	"on-click": "playerctl play-pause"
+    },
+    "upower": {
+        "format": " {percentage}",
+        "tooltip": false,
+        "show-icon": true,
+        "icon-size": 14
     }
 }

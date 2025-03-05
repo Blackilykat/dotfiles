@@ -66,3 +66,7 @@ window#waybar {
 #custom-separator {
 	color: @surface2;
 }
+
+#upower image {
+	color: @green;
+}
