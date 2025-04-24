@@ -45,14 +45,16 @@
     },
     "cpu": {
         "format": "<span color=\"#a6da95\">󰓅</span> {usage}%",
-        "tooltip": false
+        "tooltip": false,
+        "interval": 2
     },
     "memory": {
         "format": "<span color=\"#a6da95\">󰍛</span> {used} GiB"
     },
     "network": {
 	"format": "<span color=\"#a6da95\"></span> {bandwidthUpBits} <span color=\"#a6da95\"></span> {bandwidthDownBits}",
-        "interface": "wlan0"
+        "interval": 1,
+        "interface": "eno1"
     },
     "pulseaudio": {
         "format": "{volume}% <span color=\"#a6da95\">󰕾</span>",
