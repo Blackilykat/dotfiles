@@ -103,7 +103,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias "nullvim=nvim /dev/null"
+alias "nullvim=nvim -n -i NONE /dev/null"
 
 if [ "$TERM" = 'xterm-kitty' ]; then
 	export TERM='xterm-256color'
