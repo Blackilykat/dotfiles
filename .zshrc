@@ -105,6 +105,9 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias "nullvim=nvim -n -i NONE /dev/null"
 
+alias "wdc=pwd | wl-copy"
+alias 'wdp=cd $(wl-paste)'
+
 if [ "$TERM" = 'xterm-kitty' ]; then
 	export TERM='xterm-256color'
 fi
