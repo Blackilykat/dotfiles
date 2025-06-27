@@ -108,6 +108,8 @@ alias "nullvim=nvim -n -i NONE /dev/null"
 alias "wdc=pwd | wl-copy"
 alias 'wdp=cd $(wl-paste)'
 
+alias "count=wc -l"
+
 if [ "$TERM" = 'xterm-kitty' ]; then
 	export TERM='xterm-256color'
 fi
