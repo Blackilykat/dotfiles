@@ -1,6 +1,8 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export PATH=$PATH:/home/blackilykat/go/bin
+export ANDROID_HOME=/opt/android-sdk
+export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -113,5 +115,5 @@ if [ "$TERM" = 'xterm-kitty' ]; then
 fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-#export SDKMAN_DIR="$HOME/.sdkman"
-#[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
