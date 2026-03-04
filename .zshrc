@@ -88,7 +88,6 @@ source $ZSH/oh-my-zsh.sh
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
-#   export EDITOR='nvim'
 # fi
 
 # Compilation flags
@@ -113,6 +112,9 @@ alias 'wdp=cd $(wl-paste)'
 if [ "$TERM" = 'xterm-kitty' ]; then
 	export TERM='xterm-256color'
 fi
+
+
+export EDITOR='nvim'
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
