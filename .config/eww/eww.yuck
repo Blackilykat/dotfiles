@@ -1,0 +1,418 @@
+(defwindow bar_left
+  :monitor 0
+  :geometry (geometry :x "0%"
+    :y "0%"
+    :width "100%"
+    :anchor "top center"
+  )
+  :stacking "bottom"
+  :exclusive true
+  :focusable false
+  :namespace "bar_left"
+
+  (box :class "main"
+    (box :halign "start" :class "left" :space-evenly false
+      (tray)
+      (control :label "VOL"
+        :value sinkvolumed
+        :color "#F88"
+        :onchange "wpctl set-volume @DEFAULT_SINK@ {}%; ${EWW_CMD} poll sinkvolumed"
+        :labelonclick "${EWW_CMD} update wpsinks_expanded=$(if [ $(${EWW_CMD} get wpsinks_expanded) = 'true' ]; then echo false; else echo true; fi)"
+      )
+      (wpsinks)
+
+      ;; sources omitted as they don't seem to properly have a main one, even though the command does reutn something
+      ;(control :label "MIC"
+      ;  :value sourcevolumed
+      ;  :color "#8F8"
+      ;  :onchange "wpctl set-volume @DEFAULT_SOURCE@ {}%; ${EWW_CMD} poll sourcevolumed"
+      ;)
+      (vpn)
+    )
+    (box :class "middle" :halign "center" :hexpand false
+      (media)
+    )
+    (box :halign "end" :class "right" :space-evenly false
+      (network)
+      (metrics)
+      time
+      (power)
+    )
+  )
+)
+
+(defwindow date_left
+  :monitor 0
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "1360"
+  )
+  :exclusive false
+  :namespace "date_left"
+  :focusable false
+  :stacking "bottom"
+  (datew)
+)
+
+(defwindow date_right
+  :monitor 1
+  :geometry (geometry
+    :x "0%"
+    :y "0%"
+    :width "100%"
+    :height "100%"
+  )
+  :exclusive false
+  :namespace "date_left"
+  :focusable false
+  :stacking "bottom"
+  (datew)
+)
+
+(defwidget datew []
+  (box :class "date"
+    (overlay
+      (label
+        :class "day"
+        :xalign 0
+        :yalign 1
+        :text date
+      )
+      (label
+        :class "weekday"
+        :xalign 0
+        :yalign 1
+        :text weekday
+      )
+    )
+  )
+)
+
+(defpoll time :interval "1s"
+  `date +'%H:%M:%S'`)
+
+(defpoll date :interval "1m"
+  `date +'%Y-%m-%d'`)
+
+(defpoll weekday :interval "1m"
+  `date +'%A'`)
+
+(defpoll sinkvolumed :interval "2s"
+  :initial '0'
+  `echo "$(wpctl get-volume @DEFAULT_SINK@ | cut -c 9-)*100" | bc`)
+
+;(defpoll sourcevolumed :interval "2s"
+;  :initial '0'
+;  `echo "$(wpctl get-volume @DEFAULT_SOURCE@ | cut -c 9-)*100" | bc`)
+
+(defpoll sinklistd :interval "999999999s"
+  :initial '[]'
+  `/home/blackilykat/.config/eww/scripts/wpstatus.sh sinks`
+)
+
+;(defpoll sourcelistd :interval "1s"
+;  :initial '[]'
+;  `/home/blackilykat/.config/eww/scripts/wpstatus.sh sources`
+;)
+
+(defpoll gpud :interval "2s"
+  :initial '0'
+  `nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits`)
+
+(deflisten mediad
+  :initial '{"status":"Stopped","artist":"","title":"","position":"0","length":"0","albumart":""}'
+  `~/.config/eww/scripts/playerctl.sh`)
+
+(deflisten vpnd
+  :initial '{"status":"disconnected","relay":""}'
+  `~/.config/eww/scripts/mullvad.sh`)
+
+(defwidget media []
+  (eventbox
+    :cursor "pointer"
+    :onclick "playerctl play-pause"
+    :onscroll "if [ {} = up ]; then playerctl previous; else playerctl next; fi"
+    (box :class "media" :space-evenly false :halign "center" :hexpand false
+      (label :class "status ${
+          mediad.status == "Stopped" ? "status_stopped" :
+            mediad.status == "Paused" ? "status_paused" :
+              mediad.status == "Playing" ? "status_playing" : "status_unknown"}"
+        :text "${
+          mediad.status == "Stopped" ? "󰓛" :
+            mediad.status == "Paused" ? "󰐊" :
+              mediad.status == "Playing" ? "󰏤" : "?"
+        }"
+      )
+      (literal :content "${
+        mediad.status == "Stopped" ? "" :
+          mediad.albumart == "" ? "" : "(albumart)"
+      }")
+      (label :truncate true
+        :text "${
+        mediad.status == "Stopped" ? "" : "${mediad.title}"
+      }")
+    )
+  )
+)
+
+(defwidget albumart []
+  (box :class "album_art_container"
+    (box :class "album_art_glow"
+      ; background image must be here or it will not update when the album art changes
+      :style "background-image: url('/tmp/bar_media_albumart_gradient.png')"
+      :height 70
+      :width 70
+      (box :class "album_art"
+        :style "background-image: url('${mediad.albumart}')"
+        :height 45
+        :width 45
+      )
+    )
+  )
+)
+
+(defvar power_expanded false)
+
+(defwidget power []
+  (eventbox
+    :onhover "${EWW_CMD} update power_expanded=true"
+    :onhoverlost "${EWW_CMD} update power_expanded=false"
+    (box :class "power" :space-evenly false
+      (revealer
+        :reveal power_expanded
+        :transition "slideleft"
+        (box
+          (button :class "button-monitors"
+            :onclick "sleep 1; niri msg action power-off-monitors"
+            :timeout "1200ms"
+            "󰶐")
+          (button :class "button-logout"
+            :onclick "niri msg action quit"
+            "󰍃")
+          (button :class "button-restart"
+            :onclick "reboot"
+            "󰑓")
+        )
+      )
+      (button :class "button-poweroff"
+        :onclick "systemctl poweroff -i"
+        "󰐥")
+    )
+  )
+)
+
+(defwidget metrics []
+  (box :space-evenly false
+    ; This measures FS activity, not free space!
+    (metric :label "FS"
+      :value "${diskd}"
+      :color "#8BF"
+    )
+    (metric :label "RAM"
+      :value "${EWW_RAM.used_mem_perc}"
+      :color "#FF8"
+    )
+    (metric :label "CPU"
+      :value "${EWW_CPU.avg}"
+      :color "#F88"
+    )
+    (metric :label "GPU"
+      :value "${gpud}"
+      :color "#8F8"
+    )
+  )
+)
+
+
+(deflisten diskd
+  :initial 0
+  `~/.config/eww/scripts/disk.sh`)
+
+(deflisten networkd
+  :initial '{"down":0,"up":0}'
+  `~/.config/eww/scripts/network.sh eno1`)
+
+(defwidget network []
+  (box :space-evenly false
+    "RX "
+    (label 
+      :class "network-${
+        networkd.down < 1250 ? "vl" :
+        networkd.down < 125000 ? "l" :
+        networkd.down < 1250000 ? "m" :
+        networkd.down < 3750000 ? "h" :
+        networkd.down < 12500000 ? "vh" : "vvh"
+      }"
+      :text "${
+        networkd.down < 2 ? "00${networkd.down * 8}b" :
+        networkd.down < 13 ? "0${networkd.down * 8}b" :
+        networkd.down < 125 ? "${networkd.down * 8}b" :
+        networkd.down < 1250 ? "00${floor(networkd.down * 8 / 1000)}k" :
+        networkd.down < 12500 ? "0${floor(networkd.down * 8 / 1000)}k" :
+        networkd.down < 125000 ? "${floor(networkd.down * 8 / 1000)}k" :
+        networkd.down < 1250000 ? "00${floor(networkd.down * 8 / 1000000)}M" :
+        networkd.down < 12500000 ? "0${floor(networkd.down * 8 / 1000000)}M" :
+        networkd.down < 125000000 ? "${floor(networkd.down * 8 / 1000000)}M" :
+        "00${floor(networkd.down * 8 / 1000000000)}G"; surely not over 10G
+      } "
+    )
+    "TX "
+    (label
+      :class "network-${
+        networkd.up < 1250 ? "vl" :
+        networkd.up < 125000 ? "l" :
+        networkd.up < 1250000 ? "m" :
+        networkd.up < 3750000 ? "h" :
+        networkd.up < 12500000 ? "vh" : "vvh"
+      }"
+      :text "${
+        networkd.up < 2 ? "00${networkd.up * 8}b" :
+        networkd.up < 13 ? "0${networkd.up * 8}b" :
+        networkd.up < 125 ? "${networkd.up * 8}b" :
+        networkd.up < 1250 ? "00${floor(networkd.up * 8 / 1000)}k" :
+        networkd.up < 12500 ? "0${floor(networkd.up * 8 / 1000)}k" :
+        networkd.up < 125000 ? "${floor(networkd.up * 8 / 1000)}k" :
+        networkd.up < 1250000 ? "00${floor(networkd.up * 8 / 1000000)}M" :
+        networkd.up < 12500000 ? "0${floor(networkd.up * 8 / 1000000)}M" :
+        networkd.up < 125000000 ? "${floor(networkd.up * 8 / 1000000)}M" :
+        "00${floor(networkd.up * 8 / 1000000000)}G"; surely not over 10G
+      } "
+    )
+  )
+)
+
+(defwidget metric [label value color]
+  (box :orientation "h"
+    :class "metric"
+    :space-evenly false
+    :style "background-image: url('/home/blackilykat/.config/eww/blurs/v/${color}-${
+      value < 5 ? "1" : ; this would be a simple calculation but i am not awake enough
+      value < 10 ? "2" :; to do it correctly and this is very reliable
+      value < 15 ? "3" :
+      value < 20 ? "4" :
+      value < 25 ? "5" :
+      value < 30 ? "6" :
+      value < 35 ? "7" :
+      value < 40 ? "8" :
+      value < 45 ? "9" :
+      value < 50 ? "10" :
+      value < 55 ? "11" :
+      value < 60 ? "12" :
+      value < 65 ? "13" :
+      value < 70 ? "14" :
+      value < 75 ? "15" :
+      value < 80 ? "16" :
+      value < 85 ? "17" :
+      value < 90 ? "18" :
+      value < 95 ? "19" : "20"
+    }.png')"
+    (box :class "label" label)
+    (scale :min 0
+      :max 101
+      :orientation "v"
+      :flipped true
+      :value value
+      :active false
+      :css "trough {background-color: rgba(${color}, 0.2);} trough highlight {background-color: ${color};}"
+    )
+  )
+)
+
+(defwidget control [label value color onchange labelonclick]
+  (box :orientation "h"
+    :class "control"
+    :space-evenly false
+    :style "background-image: url('/home/blackilykat/.config/eww/blurs/h/${color}-${
+      value < 5 ? "1" :
+      value < 10 ? "2" :
+      value < 15 ? "3" :
+      value < 20 ? "4" :
+      value < 25 ? "5" :
+      value < 30 ? "6" :
+      value < 35 ? "7" :
+      value < 40 ? "8" :
+      value < 45 ? "9" :
+      value < 50 ? "10" :
+      value < 55 ? "11" :
+      value < 60 ? "12" :
+      value < 65 ? "13" :
+      value < 70 ? "14" :
+      value < 75 ? "15" :
+      value < 80 ? "16" :
+      value < 85 ? "17" :
+      value < 90 ? "18" :
+      value < 95 ? "19" : "20"
+    }.png')"
+    (eventbox
+      :cursor "${labelonclick == "" ? "" : "pointer"}"
+      :onclick labelonclick
+      (box :class "label" label)
+    )
+    (scale :min 0
+      :max 101
+      :orientation "h"
+      :value value
+      :active true
+      :onchange onchange
+      :css "trough {background-color: rgba(${color}, 0.3);} trough highlight {background-color: ${color};}"
+    )
+  )
+)
+
+(defvar tray_expanded false)
+
+(defwidget tray []
+  (eventbox
+    :onclick "${EWW_CMD} update tray_expanded=$(if [ $(${EWW_CMD} get tray_expanded) = 'true' ]; then echo false; else echo true; fi)"
+    :cursor "pointer"
+    (box :class "tray" :space-evenly false
+      "󰥭"
+      (revealer
+        :reveal tray_expanded
+        :transition "slideright"
+        (systray)
+      )
+    )
+  )
+)
+
+(defwidget vpn []
+  (eventbox
+    :onclick "mullvad-vpn"
+    :cursor "pointer"
+    (box :space-evenly false
+      (label :class "vpn vpn-${vpnd.status}"
+        :text "${
+          vpnd.status == "connected" ? "󰒙 " :
+          vpnd.status == "connecting" ? "󰇠 " :
+          vpnd.status == "disconnecting" ? "󰫝 " :
+          vpnd.status == "disconnected" ? " " :
+          vpnd.status == "blocked" ? " " : "? "
+        }"
+      )
+      (label :class "vpn-text" :text "${vpnd.relay}")
+    )
+  )
+)
+
+(defvar wpsinks_expanded false)
+(defwidget wpsinks []
+  (revealer
+    :reveal wpsinks_expanded
+    :transition "slideright"
+    (box :space-evenly false
+      (for sink in sinklistd
+        (eventbox
+          :onclick "wpctl set-default ${sink.id}; ${EWW_CMD} poll sinklistd; ${EWW_CMD} poll sinkvolumed"
+          :cursor "pointer"
+          (label :class "sink ${sink.selected == "*" ? "selected" : ""}"
+            :limit-width 10
+            :text "${sink.name}"
+          )
+        )
+      )
+    )
+  )
+)

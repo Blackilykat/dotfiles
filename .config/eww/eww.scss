@@ -1,0 +1,250 @@
+$glow_radius: 6px;
+
+$red: #F88;
+$orange: #FB8;
+$yellow: #FF8;
+$green: #8F8;
+$blue: #8BF;
+$pink: #F8F;
+
+$outputW: 2560px;
+$outputH: 1440px;
+
+.bar_left {
+  background-color: transparent;
+}
+
+.main {
+  min-height: 80px;
+  padding: 0em 2em 0em 2em;
+  label {
+    font-size: 1.5em;
+    font-family: "FiraCode Nerd Font";
+    text-shadow: 0px 0px $glow_radius #FFF;
+  }
+}
+
+.media {
+  .status {
+    color: $blue;
+    text-shadow: 0px 0px $glow_radius $blue;
+    margin-right: 7px;
+  }
+
+  .status_playing {
+    color: #88FF88;
+    text-shadow: 0px 0px $glow_radius $green;
+  }
+
+  .status_paused {
+    color: #88CCFF;
+    text-shadow: 0px 0px $glow_radius $blue;
+  }
+
+  .status_stopped {
+    color: #FF8888;
+    text-shadow: 0px 0px $glow_radius $red;
+  }
+
+  .album_art_container {
+    padding-top: 5px;
+  }
+
+  .album_art_glow {
+    background-size: 70px;
+    background-repeat: no-repeat;
+  }
+
+  .album_art {
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 100%;
+    // (glow size - this size) / 2 + 1
+    margin: 13px;
+  }
+}
+
+.power {
+  font-weight: bold;
+  font-size: 18px;
+
+  padding-left: 5px;
+
+  button {
+    background: transparent;
+    //border: solid 2px red;
+  }
+
+  .button-poweroff {
+    color: $red;
+    text-shadow: 0px 0px $glow_radius $red;
+    padding: 0 12px 0 12px;
+  }
+  .button-restart {
+    color: $yellow;
+    text-shadow: 0px 0px $glow_radius $yellow;
+    padding: 0 15px 0 10px;
+  }
+  .button-logout {
+    color: $green;
+    text-shadow: 0px 0px $glow_radius $green;
+    padding: 0 12px 0 12px;
+  }
+  .button-monitors {
+    color: $blue;
+    text-shadow: 0px 0px $glow_radius $blue;
+    padding: 0 17px 0 7px;
+  }
+}
+
+.metric * {
+  all: unset;
+}
+
+.metric {
+  background-repeat: no-repeat;
+  background-position: right;
+
+  scale trough highlight {
+    all: unset;
+    border-radius: 10px;
+  }
+
+  scale trough {
+    all: unset;
+    border-radius: 10px;
+    min-height: 50px;
+    min-width: 5px;
+    margin: 15px;
+  }
+
+
+}
+.control * {
+  all: unset;
+}
+
+.control {
+  background-repeat: no-repeat;
+  background-position: right;
+
+  scale trough highlight {
+    all: unset;
+    border-radius: 10px;
+  }
+
+  scale trough {
+    all: unset;
+    border-radius: 10px;
+    min-height: 5px;
+    min-width: 100px;
+    margin: 15px;
+  }
+}
+
+.network-vl {
+  color: gray;
+  text-shadow: 0px 0px $glow_radius gray;
+}
+.network-l {
+  color: $orange;
+  text-shadow: 0px 0px $glow_radius $orange;
+}
+.network-m {
+  color: $yellow;
+  text-shadow: 0px 0px $glow_radius $yellow;
+}
+.network-h {
+  color: $green;
+  text-shadow: 0px 0px $glow_radius $green;
+}
+.network-vh {
+  color: $blue;
+  text-shadow: 0px 0px $glow_radius $blue;
+}
+.network-vvh {
+  color: $pink;
+  text-shadow: 0px 0px $glow_radius $pink;
+}
+
+// systray
+menu {
+  background-color: black;
+}
+
+.tray {
+  padding-right: 10px;
+
+  &> label {
+    padding-right: 5px;
+  }
+
+  image {
+    padding: 5px;
+  }
+}
+
+.vpn-connected {
+  color: $green;
+  text-shadow: 0px 0px $glow_radius $green;
+}
+
+.vpn-connecting {
+  color: $yellow;
+  text-shadow: 0px 0px $glow_radius $yellow;
+}
+
+.vpn-disconnecting {
+  color: $orange;
+  text-shadow: 0px 0px $glow_radius $orange;
+}
+
+.vpn-disconnected {
+  color: $red;
+  text-shadow: 0px 0px $glow_radius $red;
+}
+
+.vpn-blocked {
+  color: $red;
+  text-shadow: 0px 0px $glow_radius $red;
+}
+
+.vpn-text {
+  color: #EEEEEE;
+  text-shadow: 0px 0px $glow_radius #EEEEEE;
+}
+
+label.source,
+label.sink {
+  color: $blue;
+  text-shadow: 0px 0px $glow_radius $blue;
+  padding: 10px;
+  font-size: 16px;
+
+  &.selected {
+    color: $green;
+    text-shadow: 0px 0px $glow_radius $green;
+  }
+}
+
+.date_left, .date_right {
+  background: transparent;
+}
+
+.date {
+  $size: 120px;
+  label {
+    font-size: $size;
+    font-family: "FiraCode Nerd Font";
+    color: #AAA;
+    text-shadow: 0px 0px $glow_radius #AAA;
+  }
+
+  .day {
+    padding: 0 0 calc($size + 520px) $size;
+  }
+
+  .weekday {
+    padding: 0 0 calc($size + 390px) $size;
+  }
+}

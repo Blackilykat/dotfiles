@@ -1,19 +1,20 @@
 [global]
-corner_radius = 15
-font = "Ubuntu Nerd Font Medium 14"
-frame_color = "#A6DA95"
+corner_radius = 8
+font = "Ubuntu Nerd Font Medium 13"
+frame_color = "#88BBFF"
+frame_width = 2
 separator_color= frame
 dmenu = "/usr/bin/rofi -dmenu"
 
 [urgency_low]
-background = "#24273A"
-foreground = "#CAD3F5"
+background = "#000000BB"
+foreground = "#AAAAAA"
 
 [urgency_normal]
-background = "#24273A"
-foreground = "#CAD3F5"
+background = "#000000BB"
+foreground = "#FFFFFF"
 
 [urgency_critical]
-background = "#24273A"
-foreground = "#CAD3F5"
-frame_color = "#F5A97F"
+background = "#000000BB"
+foreground = "#FFFFFF"
+frame_color = "#FF8888"
