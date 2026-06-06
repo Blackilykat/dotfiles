@@ -995,19 +995,24 @@ vim.lsp.enable({
   "clangd",
   "cpplint",
   "cpptools",
-  "css-lsp",
-  "elixir-ls",
+  "css_lsp",
+  "elixir_ls",
   "gopls",
-  "html-lsp",
+  "html_lsp",
   "htmlbeautifier",
   "jdtls",
-  "kotlin-lsp",
-  "lua-language-server",
+  "kotlin_lsp",
+  "lua_language_server",
   "phpactor",
-  "rust-analyzer",
-  "sql-formatter",
+  "rust_analyzer",
   "stylua",
-  "systemd-lsp"
+  "systemd_lsp"
+})
+
+-- Temporary fix for https://github.com/Kotlin/kotlin-lsp/issues/217 but it probably
+-- won't hurt to keep this in case it happens again
+vim.lsp.config('kotlin_lsp', {
+  cmd = { "faketime", "2026-06-04", "intellij-server", "--stdio" }
 })
 
 -- Make clangd attach correctly to .h files as C rather than C++
