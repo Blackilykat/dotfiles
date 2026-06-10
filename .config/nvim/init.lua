@@ -980,6 +980,8 @@ require("neo-tree").setup({
   open_files_do_not_replace_types = {}, -- don't create a split even if the current buffer is a terminal
 })
 
+vim.pack.add { 'https://codeberg.org/mfussenegger/nvim-jdtls' }
+
 vim.keymap.set('n', '<leader>t', ':Neotree toggle<CR>', { desc = 'Toggle file tree' })
 vim.keymap.set('n', '<leader>g', ':Neotree git_status toggle<CR>', { desc = 'Toggle git status' })
 
