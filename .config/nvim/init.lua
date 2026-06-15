@@ -25,6 +25,9 @@ do
   -- Relative line numbers
   vim.o.relativenumber = true
 
+  -- hate me
+  vim.o.tabstop = 5
+
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
 
