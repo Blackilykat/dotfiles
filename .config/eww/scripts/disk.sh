@@ -3,7 +3,7 @@
 
 update() {
 	lt=$t
-	out=$(cat /sys/block/sda/stat)
+	out=$(cat /sys/block/nvme0n1/stat)
 # 10.  io_ticks        milliseconds  total time this block device has been active
 # see: https://www.kernel.org/doc/Documentation/block/stat.txt
 	t=$(echo "$out" | awk '{print $10}')

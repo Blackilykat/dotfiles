@@ -27,6 +27,11 @@ do
 
   -- hate me
   vim.o.tabstop = 5
+  vim.o.shiftwidth = 5
+
+  -- Enable spell check on all files
+  vim.o.spell = true
+  vim.o.spelllang = "en_us"
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
